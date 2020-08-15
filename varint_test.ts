@@ -54,7 +54,7 @@ Deno.test("VarInt decode with offset", () => {
       ),
       4,
     ),
-    [18446744073709551615n, 10],
+    [18446744073709551615n, 14],
   );
 });
 Deno.test("VarInt decode32 manual", () => {
@@ -76,7 +76,7 @@ Deno.test("VarInt decode32 overflow", () => {
 Deno.test("VarInt decode32 with offset", () => {
   assertEquals(
     decode32(Uint8Array.of(255, 255, 255, 255, 255, 255, 255, 255, 15, 0), 4),
-    [4294967295, 5],
+    [4294967295, 9],
   );
 });
 Deno.test("VarInt encode manual", () => {

@@ -22,7 +22,7 @@ export function decode(buf: Uint8Array, offset = 0): [bigint, number] {
     if (!(byte & MSB) && decoded > MaxUInt64) {
       throw new RangeError("overflow varint");
     }
-    if (!(byte & MSB)) return [decoded, i - offset + 1];
+    if (!(byte & MSB)) return [decoded, i + 1];
   }
   throw new RangeError("malformed or overflow varint");
 }
@@ -38,7 +38,7 @@ export function decode32(buf: Uint8Array, offset = 0): [number, number] {
   ) {
     let byte = buf[i];
     decoded += (byte & REST) * Math.pow(2, shift);
-    if (!(byte & MSB)) return [decoded, i - offset + 1];
+    if (!(byte & MSB)) return [decoded, i + 1];
   }
   throw new RangeError("malformed or overflow varint");
 }
