@@ -94,16 +94,19 @@ Deno.test("VarInt encode overflow with negative", () => {
   assertThrows(() => encode(-1), RangeError);
 });
 Deno.test("VarInt encode with offset", () => {
+  let uint = new Uint8Array(3)
   assertEquals(
-    encode(300, new Uint8Array(3), 1),
-    [Uint8Array.of(0, 172, 2), 2],
+    encode(300, uint, 1),
+    [Uint8Array.of(172, 2), 3],
   );
-  let uint = new Uint8Array(MaxVarIntLen64);
+  assertEquals(uint, Uint8Array.of(0, 172, 2))
+  uint = new Uint8Array(MaxVarIntLen64);
   uint[0] = uint[1] = uint[2] = 12;
   assertEquals(
     encode(4294967295, uint, 3),
-    [Uint8Array.of(12, 12, 12, 255, 255, 255, 255, 15, 0, 0), 5],
+    [Uint8Array.of(255, 255, 255, 255, 15), 8],
   );
+  assertEquals(uint,Uint8Array.of(12, 12, 12, 255, 255, 255, 255, 15, 0, 0))
 });
 Deno.test("VarInt encode<->decode", () => {
   for (
