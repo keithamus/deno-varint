@@ -8,6 +8,19 @@ const SHIFT = 7;
 const MSBN = 0x80n;
 const SHIFTN = 7n;
 
+/**
+ * Given a `buf`, starting at `offset` (default: 0), begin decoding bytes as
+ * VarInt encoded bytes, for a maximum of 10 bytes (offset + 10). The returned
+ * tuple is of the decoded varint 32-bit number, and the new offset with which
+ * to continue decoding other data.
+ *
+ * If a `bigint` in return is undesired, the `decode32` function will return a
+ * `number`, but this should only be used in cases where the varint is
+ * _assured_ to be 32-bits. If in doubt, use `decode()`.
+ *
+ * To know how many bytes the VarInt took to encode, simply negate `offset`
+ * from the returned new `offset`.
+ */
 export function decode(buf: Uint8Array, offset = 0): [bigint, number] {
   for (
     let i = offset,
@@ -27,6 +40,18 @@ export function decode(buf: Uint8Array, offset = 0): [bigint, number] {
   throw new RangeError("malformed or overflow varint");
 }
 
+/**
+ * Given a `buf`, starting at `offset` (default: 0), begin decoding bytes as
+ * VarInt encoded bytes, for a maximum of 5 bytes (offset + 5). The returned
+ * tuple is of the decoded varint 32-bit number, and the new offset with which
+ * to continue decoding other data.
+ *
+ * VarInts are _not 32-bit by default_ so this should only be used in cases
+ * where the varint is _assured_ to be 32-bits. If in doubt, use `decode()`.
+ *
+ * To know how many bytes the VarInt took to encode, simply negate `offset`
+ * from the returned new `offset`.
+ */
 export function decode32(buf: Uint8Array, offset = 0): [number, number] {
   for (
     let i = offset,
