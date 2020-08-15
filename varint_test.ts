@@ -83,7 +83,7 @@ Deno.test("VarInt encode manual", () => {
   assertEquals(encode(300, new Uint8Array(2)), [Uint8Array.of(172, 2), 2]);
   assertEquals(
     encode(4294967295),
-    [Uint8Array.of(255, 255, 255, 255, 15, 0, 0, 0, 0, 0), 5],
+    [Uint8Array.of(255, 255, 255, 255, 15), 5],
   );
   assertEquals(
     encode(18446744073709551615n),
