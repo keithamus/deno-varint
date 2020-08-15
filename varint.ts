@@ -43,6 +43,25 @@ export function decode32(buf: Uint8Array, offset = 0): [number, number] {
   throw new RangeError("malformed or overflow varint");
 }
 
+/**
+ * Takes unsigned number `num` and converts it into a VarInt encoded
+ * `Uint8Array`, returning a tuple consisting of a `Uint8Array` slice of the
+ * encoded VarInt, and an offset where the VarInt encoded bytes end within the
+ * `Uint8Array`.
+ *
+ * If `buf` is not given then a Uint8Array will be created.
+ * `offset` defaults to `0`.
+ *
+ * If passed `buf` then that will be written into, starting at `offset`. The
+ * resulting returned `Uint8Array` will be a slice of `buf`. The resulting
+ * returned number is effectively `offset + bytesWritten`.
+ *
+ * ```ts
+ * encode(1) == [Uint8Array.of(0x7F, 0x02), 2]
+ * encode(300) == [Uint8Array.of(0x7F, 0x02), 2]
+ * encode(4294967295n) == [Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF, 0x0F), 5]
+ * ```
+ */
 export function encode(
   num: bigint | number,
   buf: Uint8Array = new Uint8Array(MaxVarIntLen64),
